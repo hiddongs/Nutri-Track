@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: Nutri-Track
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/nutritrack_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 1234  # 본인의 실제 MySQL root 패스워드가 맞는지 꼭 눈으로 더블 체크!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
