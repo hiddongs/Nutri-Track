@@ -1,5 +1,7 @@
 package com.nutriTrack.controller;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +10,10 @@ import com.nutriTrack.entity.User;
 import com.nutriTrack.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+
+@CrossOrigin(origins = "*") // 모든 요청 허
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users") // 매핑 요청, 이 컨트롤러로 시작하는 주소는 /api/users로 시작
@@ -70,6 +75,20 @@ public class UserController {
 			// 없으면 에러 코드
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			
+		}
+	}
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody Map<String, String> loginData){
+		try {
+			String email = loginData.get("email");
+			String password = loginData.get("password");
+			
+			User user = userService.login(email, password);
+			
+			return ResponseEntity.ok(Map.of("accessToken", String.valueOf(user.getUserID()),
+					"name", user.getName()));
+		}catch(IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 }

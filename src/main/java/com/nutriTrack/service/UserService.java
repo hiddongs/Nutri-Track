@@ -1,5 +1,6 @@
 package com.nutriTrack.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,11 +41,29 @@ public class UserService {
 		
 		// 비밀번호 암호화 과정
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
-		return null;
 		
+		User newUser = User.builder()
+				.name(user.getName())
+				.email(user.getEmail())
+		        .password(encodedPassword)      
+		        .nickName(user.getNickName())
+		        .gender(user.getGender())
+		        .age(user.getAge())
+		        .height(user.getHeight())
+		        .weight(user.getWeight())
+		        .activityLevel(user.getActivityLevel())
+		        .targetPurpose(user.getTargetPurpose())
+		        .created_at(LocalDateTime.now()) 
+		        .build();
+		
+		User savedUser = userRepository.save(newUser);
+		return savedUser.getUserID(); 
 	}
 	private void validateDuplicateUser(String email) {
-		// TODO Auto-generated method stub
+		Optional<User> findUser = userRepository.findByEmail(email);
+	    if (findUser.isPresent()) {
+	        throw new IllegalStateException("이미 사용 중인 이메일입니다");
+	    }
 		
 	}
 	public User findOne(Long userId) {
@@ -64,6 +83,25 @@ public class UserService {
 			throw new IllegalArgumentException("존재하지 않는 유저입니다");
 			
 		}
+	}
 		
+	
+	public User login(String email, String password) {
+		
+		  Optional<User> findUserEmail = userRepository.findByEmail(email);
+		  
+		  
+		  if(findUserEmail.isPresent()) {
+			  
+			  boolean isMatch = passwordEncoder.matches(password,findUserEmail.get().getPassword());
+			  if(!isMatch) {
+				  throw new IllegalArgumentException("비밀번호가 틀렸습니다");
+			  }
+			  return findUserEmail.get();
+		  }
+		  else {
+			  throw new IllegalArgumentException("존재하지 않는 유저입니다.");
+		
+		}
 	}
 }

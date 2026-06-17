@@ -5,9 +5,13 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,9 +21,12 @@ import lombok.NoArgsConstructor;
 @Table(name="User") // 1. User 테이블과 매칭
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor  
+@Builder 
 public class User { // 2. 엔티티 클래스로 지정
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userID; // 아이디
 	
 	@Column(nullable = false)
@@ -35,17 +42,20 @@ public class User { // 2. 엔티티 클래스로 지정
     private String nickName; // 닉네임
     
     
-    private Enum gender; // 성별
+    private String gender; // 성별
     
     private int age; // 나이
     
     private double height; // 키
     private double weight; // 몸무게
     
-    private Enum actitity_level; // 평소 활동량
-    private Enum target_purpose; // 운동 목표(ex. 벌크업, 다이어트, 체중유지)
+    @Column(name = "activity_level")
+    private String activityLevel; // 평소 활동량
     
-    private String gym_name; // 헬스장 이름
+    @Column(name = "targer_purpose")
+    private String targetPurpose; // 운동 목표(ex. 벌크업, 다이어트, 체중유지)
+    
+  
     
 	private LocalDateTime created_at; // 가입일
 	
