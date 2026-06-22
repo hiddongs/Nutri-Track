@@ -2,13 +2,12 @@ package com.nutriTrack.service;
 
 import java.util.List;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nutriTrack.entity.DietRecord;
+import com.nutriTrack.entity.User;
 import com.nutriTrack.repository.DietRecordRepository;
-import com.nutriTrack.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,15 +18,19 @@ public class DietRecordService {
 
 	private final DietRecordRepository dietRecordRepository;
 	
+	@Transactional
 	public Long saveDietRecord(DietRecord dietRecord) {
 
 		
 		
 		DietRecord saveDietRecord = dietRecordRepository.save(dietRecord); 
-		return saveDietRecord.getDietID();
+		return saveDietRecord.getId();
 		
 	}
-	public List<DietRecord> getDietRecords(){
-		dietRecordRepository.findByUser();
+	public List<DietRecord> getDietRecords(User user){
+
+		
+		List<DietRecord> userDietRecord = dietRecordRepository.findByUser(user);
+		return userDietRecord;
 	}
 }

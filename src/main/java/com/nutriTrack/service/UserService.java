@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true) // 읽기 전용으로 만들어 성능 최적화
 public class UserService {
 
+	
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder; // 비밀번호 암호화를 위한 도구
 	

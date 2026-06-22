@@ -4,13 +4,19 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.nutriTrack.entity.User;
+import com.nutriTrack.jwt.JwtUtil;
 import com.nutriTrack.service.UserService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 @CrossOrigin(origins = "*") // 모든 요청 허
@@ -20,6 +26,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 public class UserController {
 
+	private final JwtUtil jwtUtil;
+	
 	private final UserService userService;
 	
 	/*
@@ -82,10 +90,15 @@ public class UserController {
 		try {
 			String email = loginData.get("email");
 			String password = loginData.get("password");
-			
 			User user = userService.login(email, password);
 			
-			return ResponseEntity.ok(Map.of("accessToken", String.valueOf(user.getUserID()),
+			String token = jwtUtil.generateToken(user.getUserID());
+			
+			
+			
+			
+			return ResponseEntity.ok(Map.of(
+					"accessToken", token,
 					"name", user.getName()));
 		}catch(IllegalArgumentException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
