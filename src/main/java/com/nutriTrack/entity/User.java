@@ -55,8 +55,17 @@ public class User { // 2. 엔티티 클래스로 지정
     @Column(name = "targer_purpose")
     private String targetPurpose; // 운동 목표(ex. 벌크업, 다이어트, 체중유지)
     
-  
-    
+    // 못 먹는 음식/알레르기
+    private String allergies;
+
+    // 기저질환
+    private String diseases;
+
+    // 식품 취향
+    private String foodPreferences;
+
+
+
 	private LocalDateTime created_at; // 가입일
 	
 
